@@ -138,10 +138,8 @@
             for (var i = 0; i < dds.length; i++) {
               dds[i].contentEditable = true;
               dds[i].addEventListener("focus", function() {
-                //this.classList.add("editing");
               }, false);
               dds[i].addEventListener("blur", function() {
-                //this.classList.remove("editing");
               }, false);
               dds[i].addEventListener("keydown", function(evt) {
                 if (evt.keyCode == 13) {
