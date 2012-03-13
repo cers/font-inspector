@@ -1,416 +1,451 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<script>
-window.onmessage = function(aMsg) {
-  document.body.className = "";
-  var data = JSON.parse(aMsg);
-  if (data.method == "HIDE") {
-    document.body.className = "nonode";
-  } else {
-    document.body.className = "";
-    if (data.fonts.length == 0) {
-      // NO FONTS
-    } else {
-      var usedfont = data.fonts[0]; // we work only on the first font
-      var style = data.computedStyle;
-      var info = {
-        font_family: {
-          value: usedfont.CSSFamilyName
-        },
-        URI: {
-          value: usedfont.URI
-        },
-        format: {
-          value: usedfont.format
-        },
-        meta: {
-          value: usedfont.metadata,
-          default: ""
-        },
-        color: {
-          value: style.color
-        },
-        families: {
-          value: style.font_family.split(",").map(function(f) fontMatch(usedfont.CSSFamilyName,f)?f:"<del>"+f+"</del>").join(", ")
-        },
-        font_size: {
-          value: style.font_size
-        },
-        font_size_adjust: {
-          value: style.font_size_adjust,
-          default: "none"
-        },
-        font_stretch: {
-          value: style.font_stretch,
-          default: "normal"
-        },
-        font_style: {
-          value: style.font_style,
-          default: "normal"
-        },
-        font_variant: {
-          value: style.font_variant,
-          default: "normal"
-        },
-        font_weight: {
-          value: style.font_weight,
-          default: "normal"
-        },
-        letter_spacing: {
-          value: style.letter_spacing,
-          default: "auto"
-        },
-        line_height: {
-          value: style.line_height,
-          default: "auto"
-        },
-        opacity: {
-          value: style.opacity,
-          default: "1"
-        },
-        text_align: {
-          value: style.text_align
-        },
-        text_decoration: {
-          value: style.text_decoration,
-          default: "none"
-        },
-        text_indent: {
-          value: style.text_indent,
-          default: "0px"
-        },
-        text_shadow: {
-          value: style.text_shadow,
-          default: "none"
-        },
-        text_transform: {
-          value: style.text_transform,
-          default: "none"
-        },
-        white_space: {
-          value: style.white_space,
-          default: "normal"
-        },
-        word_spacing: {
-          value: style.word_spacing,
-          default: "0px"
-        },
-        word_wrap: {
-          value: style.word_wrap,
-          default: "normal"
-        },
-      };
-      for (var i in info) {
-        var els = document.querySelectorAll("."+_toDash(i));
-        for (var o = 0; o < els.length; o++) {
-          var v = els[o];
-          if (v.dataset.attribute) {
-            v.setAttribute(v.dataset.attribute, info[i].value);
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>
+      window.onmessage = function(aMsg) {
+        document.body.className = "";
+        var data = JSON.parse(aMsg);
+        if (data.method == "HIDE") {
+          document.body.className = "nonode";
+        } else {
+          document.body.className = "";
+          if (data.fonts.length == 0) {
+            // NO FONTS
           } else {
-            v.innerHTML = info[i].value;
-          }
-          if (info[i].default && info[i].value == info[i].default) {
-            v.classList.add("default");
-          } else {
-            v.classList.remove("default");
+            var usedfont = data.fonts[0]; // we work only on the first font
+            var style = data.computedStyle;
+            var info = {
+              used_family: {
+                value: usedfont.CSSFamilyName
+              },
+              URI: {
+                value: usedfont.URI
+              },
+              format: {
+                value: usedfont.format
+              },
+              meta: {
+                value: usedfont.metadata,
+                default: ""
+              },
+              color: {
+                value: style.color
+              },
+              font_family: {
+                value: style.font_family.split(",").map(function(f) fontMatch(usedfont.CSSFamilyName,f)?f:"<del>"+f+"</del>").join(", ")
+              },
+              font_size: {
+                value: style.font_size
+              },
+              font_size_adjust: {
+                value: style.font_size_adjust,
+                default: "none"
+              },
+              font_stretch: {
+                value: style.font_stretch,
+                default: "normal"
+              },
+              font_style: {
+                value: style.font_style,
+                default: "normal"
+              },
+              font_variant: {
+                value: style.font_variant,
+                default: "normal"
+              },
+              font_weight: {
+                value: style.font_weight,
+                default: "normal"
+              },
+              letter_spacing: {
+                value: style.letter_spacing,
+                default: "auto"
+              },
+              line_height: {
+                value: style.line_height,
+                default: "auto"
+              },
+              opacity: {
+                value: style.opacity,
+                default: "1"
+              },
+              text_align: {
+                value: style.text_align
+              },
+              text_decoration: {
+                value: style.text_decoration,
+                default: "none"
+              },
+              text_indent: {
+                value: style.text_indent,
+                default: "0px"
+              },
+              text_shadow: {
+                value: style.text_shadow,
+                default: "none"
+              },
+              text_transform: {
+                value: style.text_transform,
+                default: "none"
+              },
+              white_space: {
+                value: style.white_space,
+                default: "normal"
+              },
+              word_spacing: {
+                value: style.word_spacing,
+                default: "0px"
+              },
+              word_wrap: {
+                value: style.word_wrap,
+                default: "normal"
+              },
+            };
+            for (var i in info) {
+              var els = document.querySelectorAll("."+_toDash(i));
+              for (var o = 0; o < els.length; o++) {
+                var v = els[o];
+                if (v.dataset.attribute) {
+                  v.setAttribute(v.dataset.attribute, info[i].value);
+                } else {
+                  v.innerHTML = info[i].value;
+                }
+                if (info[i].default && info[i].value == info[i].default) {
+                  v.classList.add("default");
+                } else {
+                  v.classList.remove("default");
+                }
+              }
+            }
+            var fontLink =  document.getElementById("fontLink");
+            // URI.value is empty when system fonts are used
+            fontLink.href = info.URI.value;
+            if (info.URI.value) {
+              fontLink.style.display = "inline";
+              // also inject font into document, so it can be sed below
+              // injectStyle('@font-face {font-family: "'+usedfont.CSSFamilyName+'"; src: url("'+info.URI.value+'");}');
+            }
+            else {
+              fontLink.style.display = "none";
+            }
+            // display font family in given font
+            // document.querySelector("h1.used-family").style.fontFamily = style.font_family;
+            injectStyle(".color:before{content:' '; height: 8px; width: 8px; border: 1px #6c767e solid; display: inline-block; margin-right: 5px; background: "+style.color+"}");
+      
+            var dds = document.querySelectorAll("dd");
+            document.body.spellcheck = false;
+            for (var i = 0; i < dds.length; i++) {
+              dds[i].contentEditable = true;
+              dds[i].addEventListener("focus", function() {
+                //this.classList.add("editing");
+              }, false);
+              dds[i].addEventListener("blur", function() {
+                //this.classList.remove("editing");
+              }, false);
+              dds[i].addEventListener("keydown", function(evt) {
+                if (evt.keyCode == 13) {
+                  evt.preventDefault();
+                  return false;
+                };
+              }, false);
+              dds[i].addEventListener("keyup", function(evt) {
+                changeStyle(this.className, this.innerHTML);
+              }, false);
+            }
           }
         }
       }
-      var fontLink =  document.getElementById("fontLink");
-      // URI.value is empty when system fonts are used
-      fontLink.href = info.URI.value;
-      if (info.URI.value) {
-        fontLink.style.display = "inline";
-        // also inject font into document, so it can be sed below
-        // injectStyle('@font-face {font-family: "'+usedfont.CSSFamilyName+'"; src: url("'+info.URI.value+'");}');
+      
+      function changeStyle(prop, val) {
+        prop = prop.replace("default", "").trim();
+        window.tool.changeStyle(prop, val);
       }
-      else {
-        fontLink.style.display = "none";
+
+      function injectStyle(s) {
+        var style = document.createElement("style");
+        style.innerHTML = s;
+        document.head.appendChild(style);
       }
-      // display font family in given font
-      // document.querySelector("h1.font-family").style.fontFamily = style.font_family;
-      injectStyle(".color:before{content:' '; height: 8px; width: 8px; border: 1px #6c767e solid; display: inline-block; margin-right: 5px; background: "+style.color+"}");
-    }
-  }
-}
 
-function injectStyle(s) {
-    var style = document.createElement("style");
-    style.innerHTML = s;
-    document.head.appendChild(style);
-}
+      function fontMatch(a, b) {
+        [a,b] = [a,b].map(function(f) f.trim().toLowerCase().replace(/^"/, "").replace(/"$/, ""));
+        return a == b;
+      }
 
-function fontMatch(a, b) {
-  [a,b] = [a,b].map(function(f) f.trim().toLowerCase().replace(/^"/, "").replace(/"$/, ""));
-  return a == b;
-}
+      function _toDash(aStr) {
+        return aStr.replace("_", "-", "g");
+      }
 
-function _toDash(aStr) {
-  return aStr.replace("_", "-", "g");
-}
+      window.hideMeta = function() {
+        document.querySelector("#meta").classList.add("hidden");
+      }
 
-window.hideMeta = function() {
-  document.querySelector("#meta").classList.add("hidden");
-}
+      window.showMeta = function() {
+        document.querySelector("#meta").classList.remove("hidden");
+      }
 
-window.showMeta = function() {
-  document.querySelector("#meta").classList.remove("hidden");
-}
+      function select(e) {
+        var lis = document.querySelectorAll("#nav li");
+        for (var i = 0; i < lis.length; i++) {
+          lis[i].classList.remove("active")
+        }
+        document.querySelector("li."+e).classList.add("active");
+        var divs = document.querySelectorAll("#basic, #detail");
+        for (var i = 0; i < divs.length; i++) {
+          divs[i].style.display = "none";
+        }
+        document.getElementById(e).style.display = "block";
+      }
+    </script>
 
-function select(e) {
-  var lis = document.querySelectorAll("#nav li");
-  for (var i = 0; i < lis.length; i++) {
-    lis[i].classList.remove("active")
-  }
-  document.querySelector("li."+e).classList.add("active");
-  var divs = document.querySelectorAll("#basic, #detail");
-  for (var i = 0; i < divs.length; i++) {
-    divs[i].style.display = "none";
-  }
-  document.getElementById(e).style.display = "block";
-}
-
-</script>
-
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-  }
-  html {
-    background: -moz-linear-gradient(top, #3f4c56 36px, #263644);
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  #noview {
-      display: none;
-  }
-
-  body.nonode > #noview {
-    display: block;
-  }
-  body.nonode > #view {
-    display: none;
-  }
-
-  .default {
-    color: #717b85;
-  }
-
-  #nav {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    height: 36px;
-    background: white;
-  }
-
-  #nav li.active {
-    border-radius: 2px 2px 0 0 !important;
-    background: -moz-linear-gradient(top, #424f5a, #3f4c56);
-    padding-top: 2px;
-    margin-top: 0;
-  }
-
-  #nav li {
-    color: #dee7ee;
-    width: 50%;
-    float: left;
-    margin-top: 2px;
-    background: -moz-linear-gradient(top, #424f5a, #263644);
-    height: 34px;
-    border-radius: 0;
-    text-align: center;
-    line-height: 34px;
-    vertical-align: baseline;
-  }
-
-  #nav li.basic {
-    border-radius: 2px 0 0 0;
-  }
-
-  #nav li.detail {
-    border-radius: 0 2px 0 0;
-  }
-
-  #view, #noview {
-    margin: 0;
-    padding: 0 15px;
-  }
-
-  dl {
-    border-top: 1px #505b66 solid;
-    box-shadow: 0 -1px 0 0 #1c252d;
-    margin: 0;
-    padding: 7px 0;
-  }
-
-  dl.compact {
-    -moz-column-count: 4;
-  }
-
-  dl.list dt {
-    float: none !important;
-    width: auto;
-  }
-
-  dl.list dd, dl.list dt, dl.compact dd, dl.compact dt {
-    padding: 0;
-  }
-
-  a {
-    color: #359efe;
-    text-decoration: none;
-    border-bottom: 1px #359efe dotted;
-    line-height: 12px;
-    display: inline-block;
-  }
-
-  dt {
-    font-size: 12px;
-    color: #717b85;
-    display: block;
-    width: 86px;
-    float: left;
-    clear: both;
-    line-height: 14px;
-    padding: 3px 0;
-  }
-
-  dd {
-    color: #dee7ee;
-    font-size: 14px;
-    line-height: 14px;
-    margin: 0;
-    padding: 3px 0;
-  }
-
-  dl.compact dt {
-    float: none;
-  }
-
-  dt:after {
-    content: ":";
-  }
-
-  dl:after {
-    content: "";
-    display: block;
-    clear: both;
-    height: 0;
-    width: 0;
-  }
-
-  #view h1 {
-    margin: 0;
-    color: #dee7ee;
-    display: inline-block;
-    padding: 5px 15px 5px 0;
-    font-size: 20px;
-  }
-
-  #detail {
-    display: none;
-  }
-</style>
-
-<body class="nonode">
-  <ul id="nav">
-    <li class="basic active" onclick="select('basic')">Basic</li>
-    <li class="detail" onclick="select('detail')">Detail</li>
-  </ul>
-  <div id="noview">
-        No Node Selected.
-  </div>
-  <div id="view">
-    <h1 class="font-family">N/A</h1><a id="fontLink">url</a>
-    <dl class="list">
-      <dt>font-family</dt>
-      <dd class="families">N/A</dd>
-    </dl>
-    <div id="basic">
-      <dl class="compact">
-        <dt>font-size</dt>
-        <dd class="font-size">N/A</dd>
-        <dt>line-height</dt>
-        <dd class="line-height">N/A</dd>
-        <dt>font-style</dt>
-        <dd class="font-style">N/A</dd>
-        <dt>font-weight</dt>
-        <dd class="font-weight">N/A</dd>
-      </dl>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        font-family: Verdana, sans-serif;
+      }
+      html {
+        background: -moz-linear-gradient(top, #3f4c56 36px, #263644);
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+      #noview {
+          display: none;
+      }
+    
+      body.nonode > #noview {
+        display: block;
+      }
+      body.nonode > #view {
+        display: none;
+      }
+    
+      .default {
+        color: #717b85;
+      }
+    
+      #nav {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 36px;
+        background: white;
+      }
+    
+      #nav li.active {
+        border-radius: 2px 2px 0 0 !important;
+        background: -moz-linear-gradient(top, #424f5a, #3f4c56);
+        padding-top: 2px;
+        margin-top: 0;
+      }
+    
+      #nav li {
+        color: #dee7ee;
+        width: 50%;
+        float: left;
+        margin-top: 2px;
+        background: -moz-linear-gradient(top, #424f5a, #263644);
+        height: 34px;
+        border-radius: 0;
+        text-align: center;
+        line-height: 34px;
+        vertical-align: baseline;
+      }
+    
+      #nav li.basic {
+        border-radius: 2px 0 0 0;
+      }
+    
+      #nav li.detail {
+        border-radius: 0 2px 0 0;
+      }
+    
+      #view, #noview {
+        margin: 0;
+        padding: 0 15px;
+      }
+    
+      dl {
+        border-top: 1px #505b66 solid;
+        box-shadow: 0 -1px 0 0 #1c252d;
+        margin: 0;
+        padding: 7px 0;
+      }
+    
+      dl.compact {
+        -moz-column-count: 4;
+      }
+    
+      dl.list dt {
+        float: none !important;
+        width: auto;
+      }
+    
+      dl.list dd, dl.list dt, dl.compact dd, dl.compact dt {
+        padding: 0;
+      }
+    
+      a {
+        color: #359efe;
+        text-decoration: none;
+        border-bottom: 1px #359efe dotted;
+        line-height: 12px;
+        display: inline-block;
+      }
+    
+      dt {
+        font-size: 12px;
+        color: #717b85;
+        display: block;
+        width: 86px;
+        float: left;
+        clear: both;
+        line-height: 14px;
+        padding: 3px 0;
+      }
+    
+      dd {
+        color: #dee7ee;
+        font-size: 14px;
+        line-height: 14px;
+        margin: 0;
+        padding: 3px 0;
+      }
+    
+      dl.compact dt {
+        float: none;
+      }
+    
+      dt:after {
+        content: ":";
+      }
+    
+      dl:after {
+        content: "";
+        display: block;
+        clear: both;
+        height: 0;
+        width: 0;
+      }
+    
+      #view h1 {
+        margin: 0;
+        color: #dee7ee;
+        display: inline-block;
+        padding: 5px 15px 5px 0;
+        font-size: 20px;
+      }
+    
+      dd:focus {
+        outline: none;
+        background: white;
+        color: black;
+      }
+    
+      #detail {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="nonode">
+    <ul id="nav">
+      <li class="basic active" onclick="select('basic')">Basic</li>
+      <li class="detail" onclick="select('detail')">Detail</li>
+    </ul>
+    <div id="noview">
+      No Node Selected.
+    </div>
+    <div id="view">
+      <h1 class="used-family">N/A</h1><a id="fontLink">url</a>
       <dl class="list">
-        <dt>color</dt>
-        <dd class="color">N/A</dd>
+        <dt>font-family</dt>
+        <dd class="font-family">N/A</dd>
       </dl>
+      <div id="basic">
+        <dl class="compact">
+          <dt>font-size</dt>
+          <dd class="font-size">N/A</dd>
+          <dt>line-height</dt>
+          <dd class="line-height">N/A</dd>
+          <dt>font-style</dt>
+          <dd class="font-style">N/A</dd>
+          <dt>font-weight</dt>
+          <dd class="font-weight">N/A</dd>
+        </dl>
+        <dl class="list">
+          <dt>color</dt>
+          <dd class="color">N/A</dd>
+        </dl>
+      </div>
+      <div id="detail">
+        <dl>
+          <dt>color</dt>
+          <dd class="color">N/A</dd>
+          <dt>font-size</dt>
+          <dd class="font-size">N/A</dd>
+          <dt>font-size-adjust</dt>
+          <dd class="font-size-adjust">N/A</dd>
+          <dt>font-stretch</dt>
+          <dd class="font-stretch">N/A</dd>
+          <dt>font-style</dt>
+          <dd class="font-style">N/A</dd>
+          <dt>font-variant</dt>
+          <dd class="font-variant">N/A</dd>
+          <dt>font-weight</dt>
+          <dd class="font-weight">N/A</dd>
+        </dl>
+        <dl>
+          <dt>letter-spacing</dt>
+          <dd class="letter-spacing">N/A</dd>
+          <dt>word-spacing</dt>
+          <dd class="word-spacing">N/A</dd>
+          <dt>line-height</dt>
+          <dd class="line-height">N/A</dd>
+          <dt>opacity</dt>
+          <dd class="opacity">N/A</dd>
+        </dl>
+        <dl>
+          <dt>text-shadow</dt>
+          <dd class="text-shadow">N/A</dd>
+          <dt>text-indent</dt>
+          <dd class="text-indent">N/A</dd>
+          <dt>text-decoration</dt>
+          <dd class="text-decoration">N/A</dd>
+          <dt>text-align</dt>
+          <dd class="text-align">N/A</dd>
+          <dt>text-transform</dt>
+          <dd class="text-transform">N/A</dd>
+        </dl>
+      </div>
+  <!--    <p><span id="info-family"></span>
+        (<span id="info-format"></span>)
+        - <button onclick="showMeta()"> see license and meta data.  </button>
+      </p>
+      <p>url: <input data-attribute="value" id="info-URI"></p>
+      <p>color: <font id="info-color" data-attribute="color">⬛</font></p>
+      <p>families:<span id="info-families"></span></p>
+      <p>size:<span id="info-size"></span></p>
+      <p>font-size-adjust:<span id="info-font-size-adjust"></span></p>
+      <p>font-stretch:<span id="info-font-stretch"></span></p>
+      <p>font-variant:<span id="info-font-variant"></span></p>
+      <p>font-weight:<span id="info-font-weight"></span></p>
+      <p>letter-spacing:<span id="info-letter-spacing"></span></p>
+      <p>line-height:<span id="info-line-height"></span></p>
+      <p>opacity:<span id="info-opacity"></span></p>
+      <p>text-decoration:<span id="info-text-decoration"></span></p>
+      <p>text-indent:<span id="info-text-indent"></span></p>
+      <p>text-shadow:<span id="info-text-shadow"></span></p>
+      <p>text-transform:<span id="info-text-transform"></span></p>
+      <p>white-space:<span id="info-white-space"></span></p>
+      <p>word-spacing:<span id="info-word-spacing"></span></p>
+      <p>word-wrap:<span id="info-word-wrap"></span></p>
+      <div class="hidden" id="meta">
+        <pre id="info-meta"></pre>
+        <button onclick="hideMeta()">✕</button>
+      </div>
+     </div>-->
     </div>
-    <div id="detail">
-      <dl>
-        <dt>color</dt>
-        <dd class="color">N/A</dd>
-        <dt>font-size</dt>
-        <dd class="font-size">N/A</dd>
-        <dt>font-size-adjust</dt>
-        <dd class="font-size-adjust">N/A</dd>
-        <dt>font-stretch</dt>
-        <dd class="font-stretch">N/A</dd>
-        <dt>font-style</dt>
-        <dd class="font-style">N/A</dd>
-        <dt>font-variant</dt>
-        <dd class="font-variant">N/A</dd>
-        <dt>font-weight</dt>
-        <dd class="font-weight">N/A</dd>
-      </dl>
-      <dl>
-        <dt>letter-spacing</dt>
-        <dd class="letter-spacing">N/A</dd>
-        <dt>word-spacing</dt>
-        <dd class="word-spacing">N/A</dd>
-        <dt>line-height</dt>
-        <dd class="line-height">N/A</dd>
-        <dt>opacity</dt>
-        <dd class="opacity">N/A</dd>
-      </dl>
-      <dl>
-        <dt>text-shadow</dt>
-        <dd class="text-shadow">N/A</dd>
-        <dt>text-indent</dt>
-        <dd class="text-indent">N/A</dd>
-        <dt>text-decoration</dt>
-        <dd class="text-decoration">N/A</dd>
-        <dt>text-align</dt>
-        <dd class="text-align">N/A</dd>
-        <dt>text-transform</dt>
-        <dd class="text-transform">N/A</dd>
-      </dl>
-    </div>
-<!--    <p><span id="info-family"></span>
-      (<span id="info-format"></span>)
-      - <button onclick="showMeta()"> see license and meta data.  </button>
-    </p>
-    <p>url: <input data-attribute="value" id="info-URI"></p>
-    <p>color: <font id="info-color" data-attribute="color">⬛</font></p>
-    <p>families:<span id="info-families"></span></p>
-    <p>size:<span id="info-size"></span></p>
-    <p>font-size-adjust:<span id="info-font-size-adjust"></span></p>
-    <p>font-stretch:<span id="info-font-stretch"></span></p>
-    <p>font-variant:<span id="info-font-variant"></span></p>
-    <p>font-weight:<span id="info-font-weight"></span></p>
-    <p>letter-spacing:<span id="info-letter-spacing"></span></p>
-    <p>line-height:<span id="info-line-height"></span></p>
-    <p>opacity:<span id="info-opacity"></span></p>
-    <p>text-decoration:<span id="info-text-decoration"></span></p>
-    <p>text-indent:<span id="info-text-indent"></span></p>
-    <p>text-shadow:<span id="info-text-shadow"></span></p>
-    <p>text-transform:<span id="info-text-transform"></span></p>
-    <p>white-space:<span id="info-white-space"></span></p>
-    <p>word-spacing:<span id="info-word-spacing"></span></p>
-    <p>word-wrap:<span id="info-word-wrap"></span></p>
-    <div class="hidden" id="meta">
-      <pre id="info-meta"></pre>
-      <button onclick="hideMeta()">✕</button>
-    </div>
-   </div>-->
-   </div>
-</body>
+  </body>
+</html>
